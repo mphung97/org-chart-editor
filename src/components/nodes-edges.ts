@@ -1,7 +1,7 @@
 import { Node } from "reactflow";
 
 const position = { x: 0, y: 0 };
-const edgeType = "smoothstep";
+const edgeType = "gradientsmoothstep";
 
 export const initialNodes: Node<any>[] = [
   {

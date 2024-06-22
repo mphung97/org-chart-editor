@@ -1,71 +1,37 @@
 "use client";
 import "reactflow/dist/style.css";
 
+import { memo } from "react";
 import ReactFlow, {
   Background,
   NodeTypes,
-  useNodesState,
-  useEdgesState,
   ConnectionLineType,
-  addEdge,
-  Connection,
   EdgeTypes,
   MiniMap,
   ControlButton,
 } from "reactflow";
+import { useShallow } from "zustand/react/shallow";
+
 import { RFControls as Controls } from "./rf-controls";
 import ExportPngButton from "./download-image";
 import OrgNode from "./org-node";
-import orgEdge from "./org-edge";
+import GradientSmoothStepEdge from "./gradient-smooth-step-edge";
+import { AddIcon, UploadIcon } from "@/react-icons";
 
-import { memo, useCallback, useEffect, useSyncExternalStore } from "react";
-import { dagreStore } from "./dagre";
+import useRFStore from "./store";
+import { selectorRF } from "./selectors";
 
-import { initialNodes, initialEdges } from "./nodes-edges";
-import { UploadIcon } from "@/react-icons";
+const nodeTypes: NodeTypes = {
+  organization: OrgNode,
+};
 
-const nodeTypes: NodeTypes = { organization: OrgNode };
 const edgeTypes: EdgeTypes = {
-  organization: orgEdge,
+  gradientsmoothstep: GradientSmoothStepEdge,
 };
-
-const snapshot = {
-  nodes: [],
-  edges: [],
-};
-
-function getServerSnapshot() {
-  return snapshot;
-}
 
 function Flow() {
-  const dagreState = useSyncExternalStore(
-    dagreStore.subscribe,
-    dagreStore.getDagreValues,
-    getServerSnapshot,
-  );
-
-  const [nodes, setNodes, onNodesChange] = useNodesState(dagreState.nodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState(dagreState.edges);
-
-  useEffect(() => {
-    dagreStore.setDagreValues(initialNodes, initialEdges);
-  }, []);
-
-  useEffect(() => {
-    setNodes(dagreState.nodes);
-    setEdges(dagreState.edges);
-  }, [dagreState]);
-
-  const onConnect = useCallback(
-    (params: Connection) =>
-      setEdges((eds) =>
-        addEdge(
-          { ...params, type: ConnectionLineType.SmoothStep, animated: true },
-          eds,
-        ),
-      ),
-    [],
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useRFStore(
+    useShallow(selectorRF),
   );
 
   return (
@@ -92,8 +58,42 @@ function Flow() {
             <UploadIcon />
           </ControlButton>
           <ExportPngButton />
+          <ControlButton
+            onClick={() => alert("Something magical just happened. ✨")}
+            title="add node"
+            aria-label="add node"
+          >
+            <AddIcon />
+          </ControlButton>
         </Controls>
         <MiniMap pannable zoomable position="top-right" />
+        <svg>
+          <defs>
+            <linearGradient id="edge-gradient">
+              <stop offset="0%" stopColor="#ae53ba" />
+              <stop offset="100%" stopColor="#2a8af6" />
+            </linearGradient>
+
+            <marker
+              id="edge-circle"
+              viewBox="-5 -5 10 10"
+              refX="0"
+              refY="0"
+              markerUnits="strokeWidth"
+              markerWidth="10"
+              markerHeight="10"
+              orient="auto"
+            >
+              <circle
+                stroke="#2a8af6"
+                strokeOpacity="0.75"
+                r="2"
+                cx="0"
+                cy="0"
+              />
+            </marker>
+          </defs>
+        </svg>
       </ReactFlow>
     </div>
   );

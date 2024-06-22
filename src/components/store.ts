@@ -12,11 +12,14 @@ import {
 
 import { initialNodes, initialEdges } from "./nodes-edges";
 import { RFState } from "./types";
+import { getLayoutedElements } from "./dagre";
+
+const { nodes, edges } = getLayoutedElements(initialNodes, initialEdges);
 
 // this is our useStore hook that we can use in our components to get parts of the store and call actions
 const useRFStore = create<RFState>((set, get) => ({
-  nodes: initialNodes,
-  edges: initialEdges,
+  nodes,
+  edges,
   onNodesChange: (changes: NodeChange[]) => {
     set({
       nodes: applyNodeChanges(changes, get().nodes),

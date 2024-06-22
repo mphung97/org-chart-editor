@@ -14,7 +14,7 @@ const getLayoutedElements = (
   direction: RFDirection = "TB",
 ) => {
   const isHorizontal = direction === "LR";
-  dagreGraph.setGraph({ rankdir: direction });
+  dagreGraph.setGraph({ rankdir: direction, ranksep: 130, nodesep: 100 });
 
   nodes.forEach((node) => {
     dagreGraph.setNode(node.id, { width: nodeWidth, height: nodeHeight });
@@ -41,35 +41,4 @@ const getLayoutedElements = (
   return { nodes, edges };
 };
 
-interface DagreValues {
-  nodes: Node[];
-  edges: Edge[];
-}
-const dagreValues: DagreValues = {
-  nodes: [],
-  edges: [],
-};
-const subscribers = new Set();
-
-const dagreStore = {
-  getDagreValues() {
-    return dagreValues;
-  },
-  setDagreValues(nodes: Node[], edges: Edge[]) {
-    const { nodes: newNodes, edges: newEdges } = getLayoutedElements(
-      nodes,
-      edges,
-    );
-
-    dagreValues.nodes = newNodes;
-    dagreValues.edges = newEdges;
-
-    subscribers.forEach((listener: any) => listener());
-  },
-  subscribe(listener: any) {
-    subscribers.add(listener);
-    return () => subscribers.delete(listener);
-  },
-};
-
-export { getLayoutedElements, dagreStore };
+export { getLayoutedElements };

@@ -1,14 +1,11 @@
-import { ButtonHTMLAttributes, Ref, forwardRef, memo } from "react";
+import { memo } from "react";
 import * as Avatar from "@radix-ui/react-avatar";
-import * as Popover from "@radix-ui/react-popover";
 import { Handle, NodeProps, Position } from "reactflow";
-import { CancelIcon, EditIcon } from "@/react-icons";
 import { EditNode } from "./edit-node";
 
 // from-pink-500 via-red-500 to-yellow-500
 // from-indigo-500 via-purple-500 to-pink-500
 // from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%
-
 
 function OrgNode({ data }: NodeProps) {
   return (
