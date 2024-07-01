@@ -7,7 +7,7 @@ type RFState = {
   onNodesChange: OnNodesChange;
   onEdgesChange: OnEdgesChange;
   onConnect: OnConnect;
-  setNodes: (nodes: Node[]) => void;
+  setNodes: (node: Node[]) => void;
   setEdges: (edges: Edge[]) => void;
 };
 

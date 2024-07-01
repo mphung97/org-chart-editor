@@ -13,6 +13,7 @@ import {
 import { initialNodes, initialEdges } from "./nodes-edges";
 import { RFState } from "./types";
 import { getLayoutedElements } from "./dagre";
+import { nanoid } from "nanoid";
 
 const { nodes, edges } = getLayoutedElements(initialNodes, initialEdges);
 
@@ -31,8 +32,13 @@ const useRFStore = create<RFState>((set, get) => ({
     });
   },
   onConnect: (connection: Connection) => {
+    const newEdge = {
+      ...connection,
+      id: nanoid(),
+      type: "gradientsmoothstep",
+    };
     set({
-      edges: addEdge(connection, get().edges),
+      edges: addEdge(newEdge, get().edges),
     });
   },
   setNodes: (nodes: Node[]) => {

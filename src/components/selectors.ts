@@ -6,6 +6,7 @@ const selectorRF = (state: RFState) => ({
   onNodesChange: state.onNodesChange,
   onEdgesChange: state.onEdgesChange,
   onConnect: state.onConnect,
+  setEdges: state.setEdges,
 });
 
 export { selectorRF };

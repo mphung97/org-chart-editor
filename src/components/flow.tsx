@@ -1,4 +1,5 @@
 "use client";
+
 import "reactflow/dist/style.css";
 
 import { memo } from "react";
@@ -9,25 +10,39 @@ import ReactFlow, {
   EdgeTypes,
   MiniMap,
   ControlButton,
+  Node,
 } from "reactflow";
 import { useShallow } from "zustand/react/shallow";
 
-import { RFControls as Controls } from "./rf-controls";
-import ExportPngButton from "./download-image";
+import { RFControls as Controls } from "./controls/rf-controls";
+import ExportPngButton from "./controls/download-image";
 import OrgNode from "./org-node";
-import GradientSmoothStepEdge from "./gradient-smooth-step-edge";
-import { AddIcon, UploadIcon } from "@/react-icons";
+import GradientEdge from "./gradient-edge";
+import { UploadIcon } from "@/react-icons";
+import ConnectionLine from "./connection-line";
 
 import useRFStore from "./store";
 import { selectorRF } from "./selectors";
+import { AddNodeButton } from "./controls/add-node-button";
+import InvisibleNode from "./invisible-node";
 
 const nodeTypes: NodeTypes = {
+  invisible: InvisibleNode,
   organization: OrgNode,
 };
 
 const edgeTypes: EdgeTypes = {
-  gradientsmoothstep: GradientSmoothStepEdge,
+  gradientsmoothstep: GradientEdge,
 };
+
+function nodeColor(node: Node) {
+  switch (node.type) {
+    case "invisible":
+      return "transparent";
+    default:
+      return "#e2e2e2";
+  }
+}
 
 function Flow() {
   const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useRFStore(
@@ -43,6 +58,7 @@ function Flow() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         connectionLineType={ConnectionLineType.SmoothStep}
+        connectionLineComponent={ConnectionLine}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
@@ -58,42 +74,9 @@ function Flow() {
             <UploadIcon />
           </ControlButton>
           <ExportPngButton />
-          <ControlButton
-            onClick={() => alert("Something magical just happened. ✨")}
-            title="add node"
-            aria-label="add node"
-          >
-            <AddIcon />
-          </ControlButton>
+          <AddNodeButton />
         </Controls>
-        <MiniMap pannable zoomable position="top-right" />
-        <svg>
-          <defs>
-            <linearGradient id="edge-gradient">
-              <stop offset="0%" stopColor="#ae53ba" />
-              <stop offset="100%" stopColor="#2a8af6" />
-            </linearGradient>
-
-            <marker
-              id="edge-circle"
-              viewBox="-5 -5 10 10"
-              refX="0"
-              refY="0"
-              markerUnits="strokeWidth"
-              markerWidth="10"
-              markerHeight="10"
-              orient="auto"
-            >
-              <circle
-                stroke="#2a8af6"
-                strokeOpacity="0.75"
-                r="2"
-                cx="0"
-                cy="0"
-              />
-            </marker>
-          </defs>
-        </svg>
+        <MiniMap pannable zoomable position="top-right" nodeColor={nodeColor} />
       </ReactFlow>
     </div>
   );

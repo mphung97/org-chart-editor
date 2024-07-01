@@ -1,3 +1,4 @@
+import { cn } from "@/utils";
 import React, { forwardRef, memo } from "react";
 
 const RoundedButton = memo(
@@ -10,8 +11,12 @@ const RoundedButton = memo(
         <button
           ref={ref}
           {...props}
-          className="rounded-full w-[35px] h-[35px] inline-flex items-center justify-center text-violet11 bg-white cursor-pointer hover:drop-shadow-lg outline-none"
-          aria-label="Update dimensions"
+          className={cn([
+            "rounded-xl w-[28px] h-[28px]",
+            "inline-flex items-center justify-center",
+            "text-violet11 bg-white cursor-pointer outline-none",
+          ])}
+          aria-label="Function button"
         >
           {children}
         </button>

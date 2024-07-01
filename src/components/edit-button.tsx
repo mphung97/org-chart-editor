@@ -3,7 +3,7 @@ import * as Popover from "@radix-ui/react-popover";
 import { RoundedButton } from "./rounded-button";
 import { CancelIcon, EditIcon } from "@/react-icons";
 
-const Edit = memo(() => {
+const EditButton = memo(() => {
   return (
     <Popover.Root>
       <Popover.Trigger asChild>
@@ -87,4 +87,4 @@ const Edit = memo(() => {
   );
 });
 
-export { Edit as EditNode };
+export { EditButton };

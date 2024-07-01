@@ -1,4 +1,5 @@
-import Flow from "@/components/flow";
+import dynamic from "next/dynamic";
+const Flow = dynamic(() => import("@/components/flow"), {});
 
 export default function Home() {
   return (
