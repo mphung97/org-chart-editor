@@ -55,13 +55,10 @@ const Avatar = memo(function Avatar({ nodeId }: { nodeId: string }) {
 const OrgNode = memo(function OrgNode({ id, data }: NodeProps) {
   return (
     <>
-      <Handle type="target" position={Position.Top} />
-
       <div
         className={cn(
           "shadow-gray-50 drop-shadow-2xl w-[300px] h-[180px] rounded-[24px] p-1",
           "bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%",
-          "group",
         )}
       >
         <div
@@ -70,9 +67,8 @@ const OrgNode = memo(function OrgNode({ id, data }: NodeProps) {
             "flex flex-col items-center justify-center bg-white p-2",
           )}
         >
-          <div className="absolute top-4 left-6 invisible group-hover:visible">
-            {/* <EditButton /> */}
-            {data.no}
+          <div className="absolute top-4 left-6 invisible">
+            <EditButton />
           </div>
           <Avatar nodeId={id} />
           <input
@@ -89,6 +85,7 @@ const OrgNode = memo(function OrgNode({ id, data }: NodeProps) {
           />
         </div>
       </div>
+      <Handle type="target" position={Position.Top} />
       <Handle type="source" position={Position.Bottom} />
     </>
   );

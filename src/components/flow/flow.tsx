@@ -2,7 +2,7 @@
 
 import "reactflow/dist/style.css";
 
-import { memo, useCallback } from "react";
+import { memo, useCallback, useState } from "react";
 import ReactFlow, {
   Background,
   NodeTypes,
@@ -14,6 +14,10 @@ import ReactFlow, {
   useNodesState,
   useEdgesState,
   addEdge,
+  Panel,
+  Edge,
+  useOnSelectionChange,
+  useReactFlow,
 } from "reactflow";
 import { nanoid } from "nanoid";
 
@@ -55,6 +59,32 @@ const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
   initialEdges,
 );
 
+function Actions() {
+  const { getNode } = useReactFlow();
+  const [selectedNodes, setSelectedNodes] = useState<string[]>([]);
+  const [selectedEdges, setSelectedEdges] = useState<string[]>([]);
+
+  const onChange = useCallback(
+    ({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) => {
+      setSelectedNodes(nodes.map((node) => node.id));
+      setSelectedEdges(edges.map((edge) => edge.id));
+      console.log(getNode(nodes[0].id));
+    },
+    [],
+  );
+
+  useOnSelectionChange({
+    onChange,
+  });
+
+  return (
+    <div>
+      <p>Selected nodes: {selectedNodes.join(", ")}</p>
+      <p>Selected edges: {selectedEdges.join(", ")}</p>
+    </div>
+  );
+}
+
 function Flow() {
   const [nodes, _setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
@@ -89,7 +119,18 @@ function Flow() {
           <Export />
           <Rearrange />
         </Controls>
-        <MiniMap pannable zoomable position="top-right" nodeColor={nodeColor} />
+        <MiniMap
+          pannable
+          zoomable
+          position="bottom-right"
+          nodeColor={nodeColor}
+        />
+        <Panel
+          className="bg-[#fefefe] border-b border-solid border-b-[#eee] shadow-[0_0_2px_1px_rgba(0,0,0,0.08)] p-[5px]"
+          position="top-right"
+        >
+          <Actions />
+        </Panel>
       </ReactFlow>
     </div>
   );

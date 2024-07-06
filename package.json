@@ -1,6 +1,6 @@
 {
   "name": "org-chart-editor",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -15,6 +15,7 @@
     "@radix-ui/react-icons": "^1.3.0",
     "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.1",
+    "@xyflow/react": "^12.0.1",
     "class-variance-authority": "^0.7.0",
     "classcat": "^5.0.5",
     "dagre": "^0.8.5",
