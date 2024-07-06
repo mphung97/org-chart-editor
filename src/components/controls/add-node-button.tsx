@@ -30,7 +30,7 @@ const AddNode = memo(() => {
   );
 
   return (
-    <ControlButton onClick={onAddNode} title="add node" aria-label="add node">
+    <ControlButton onClick={onAddNode} title="add node" aria-label="add node" disabled>
       <AddIcon />
     </ControlButton>
   );

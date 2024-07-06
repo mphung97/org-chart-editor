@@ -1,14 +1,20 @@
 import { memo, useCallback } from "react";
 import { ControlButton, useReactFlow } from "reactflow";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover/popover";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { UploadIcon } from "@radix-ui/react-icons";
 import { useDropzone } from "react-dropzone";
-import { parseFile } from "../actions";
+import { parseFile } from "@/app/actions";
 import { nanoid } from "nanoid";
-import { getLayoutedElements } from "../dagre";
+import { getLayoutedElements } from "@/components/flow/dagre";
 
 const UploadButton = memo(() => {
   const { getNode, setNodes } = useReactFlow();
+
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const { data, error } = await parseFile(acceptedFiles[0]);
     if (error) return;
@@ -24,7 +30,7 @@ const UploadButton = memo(() => {
       const invisibleNode = getNode("invisible")!;
       const nodes = [invisibleNode, ...processedData];
       const { nodes: layoutedNodes } = getLayoutedElements(nodes, []);
-      setNodes(layoutedNodes);
+      setNodes([...layoutedNodes]);
     }
   }, []);
 
@@ -36,27 +42,32 @@ const UploadButton = memo(() => {
       ],
     },
     maxFiles: 1,
+    noDrag: true,
+    noKeyboard: true,
   });
 
   return (
-    <Popover>
-      <PopoverTrigger asChild>
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
         <ControlButton title="import" aria-label="import">
           <UploadIcon />
         </ControlButton>
-      </PopoverTrigger>
-      <PopoverContent className="bg-[#f9f9f9] rounded-md border-[2px] border-[#94a3ab] border-dashed">
-        <div
-          {...getRootProps({ className: "dropzone" })}
-          className="flex flex-col justify-center items-center cursor-pointer"
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="bg-white">
+        <DropdownMenuItem
+          asChild
+          className="text-[12px] cursor-pointer hover:bg-gray-100"
         >
-          <input {...getInputProps()} />
-          <h3 className="text-[16px] text-[#818181] font-medium text-center">
-            Select a file or drap and drop here
-          </h3>
-        </div>
-      </PopoverContent>
-    </Popover>
+          <span {...getRootProps()}>
+            <input {...getInputProps()} />
+            .xlsx
+          </span>
+        </DropdownMenuItem>
+        <DropdownMenuItem className="text-[12px] cursor-not-allowed hover:bg-gray-100">
+          .json
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 });
 

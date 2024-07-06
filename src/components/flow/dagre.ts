@@ -1,6 +1,6 @@
 import dagre from "dagre";
 import { Edge, Node, Position } from "reactflow";
-import { RFDirection } from "./types";
+import { RFDirection } from "../types";
 
 const dagreGraph = new dagre.graphlib.Graph();
 dagreGraph.setDefaultEdgeLabel(() => ({}));
@@ -8,6 +8,7 @@ dagreGraph.setDefaultEdgeLabel(() => ({}));
 const nodeWidth = 320;
 const nodeHeight = 170;
 
+// TODO: move to server action
 const getLayoutedElements = (
   nodes: Node[],
   edges: Edge[],

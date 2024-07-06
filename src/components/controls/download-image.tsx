@@ -9,7 +9,12 @@ import {
 } from "reactflow";
 import { toPng } from "html-to-image";
 import { DownloadIcon } from "@radix-ui/react-icons";
-import { cn } from "@/utils";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 function downloadImage(dataUrl: any) {
   const a = document.createElement("a");
@@ -60,13 +65,24 @@ function ExportPngButton() {
   };
 
   return (
-    <ControlButton onClick={onClick} title="export" aria-label="export">
-      <DownloadIcon
-        className={cn({
-          "animate-bounce": isPending,
-        })}
-      />
-    </ControlButton>
+    <DropdownMenu modal={false}>
+      <DropdownMenuTrigger asChild>
+        <ControlButton title="export" aria-label="export">
+          <DownloadIcon />
+        </ControlButton>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="bg-white">
+        <DropdownMenuItem
+          onSelect={onClick}
+          className="text-[12px] cursor-pointer hover:bg-gray-100"
+        >
+          .png
+        </DropdownMenuItem>
+        <DropdownMenuItem className="text-[12px] cursor-not-allowed hover:bg-gray-100">
+          .json
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 

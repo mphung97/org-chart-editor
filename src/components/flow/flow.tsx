@@ -9,15 +9,12 @@ import ReactFlow, {
   ConnectionLineType,
   EdgeTypes,
   MiniMap,
-  ControlButton,
   Node,
   Connection,
   useNodesState,
   useEdgesState,
   addEdge,
-  useReactFlow,
 } from "reactflow";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import { nanoid } from "nanoid";
 
 import OrgNode from "./org-node";
@@ -25,13 +22,14 @@ import InvisibleNode from "./invisible-node";
 import GradientEdge from "./gradient-edge";
 import ConnectionLine from "./connection-line";
 
-import { RFControls as Controls } from "./controls/rf-controls";
-import ExportPngButton from "./controls/download-image";
-import { AddNodeButton } from "./controls/add-node-button";
-import { UploadButton } from "./controls/upload";
+import { RFControls as Controls } from "../controls/rf-controls";
+import ExportPngButton from "../controls/download-image";
+import { AddNodeButton } from "../controls/add-node-button";
+import { UploadButton } from "../controls/upload";
 
 import { initialEdges, initialNodes } from "./nodes-edges";
 import { getLayoutedElements } from "./dagre";
+import { Rearrange } from "../controls/rearrange";
 
 const nodeTypes: NodeTypes = {
   invisible: InvisibleNode,
@@ -45,7 +43,7 @@ const edgeTypes: EdgeTypes = {
 function nodeColor(node: Node) {
   switch (node.type) {
     case "invisible":
-      return "red";
+      return "transparent";
     default:
       return "#e2e2e2";
   }
@@ -57,8 +55,7 @@ const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
 );
 
 function Flow() {
-  const { fitView } = useReactFlow();
-  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+  const [nodes, _setNodes, onNodesChange] = useNodesState(layoutedNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
 
   const onConnect = useCallback((connection: Connection) => {
@@ -69,20 +66,6 @@ function Flow() {
     };
     setEdges((preEdges) => addEdge(newEdge, preEdges));
   }, []);
-
-  const onLayout = useCallback(() => {
-    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
-      nodes,
-      edges,
-    );
-
-    setNodes([...layoutedNodes]);
-    setEdges([...layoutedEdges]);
-
-    window.requestAnimationFrame(() => {
-      fitView();
-    });
-  }, [nodes, edges]);
 
   return (
     <div className="h-screen w-screen">
@@ -104,13 +87,7 @@ function Flow() {
           <UploadButton />
           <ExportPngButton />
           <AddNodeButton />
-          <ControlButton
-            onClick={onLayout}
-            title="rearrange"
-            aria-label="rearrange"
-          >
-            <ReloadIcon />
-          </ControlButton>
+          <Rearrange />
         </Controls>
         <MiniMap pannable zoomable position="top-right" nodeColor={nodeColor} />
       </ReactFlow>

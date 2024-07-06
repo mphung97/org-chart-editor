@@ -1,7 +1,10 @@
 import { memo } from "react";
 import * as Popover from "@radix-ui/react-popover";
 import { RoundedButton } from "./rounded-button";
-import { CancelIcon, EditIcon } from "@/react-icons";
+import {
+  Cross1Icon as CancelIcon,
+  LetterCaseCapitalizeIcon as EditIcon,
+} from "@radix-ui/react-icons";
 
 const EditButton = memo(() => {
   return (
