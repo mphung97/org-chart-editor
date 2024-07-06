@@ -52,13 +52,13 @@ function OrgNode({ data }: NodeProps) {
                 readOnly
                 type="text"
                 className="text-2xl font-bold text-[#141A41] w-full text-center focus-visible:outline-none"
-                value={data.displayName ?? "no label"}
+                value={data.name ?? "no label"}
               />
               <input
                 readOnly
                 type="text"
                 className="text-lg font-medium text-[#141A41] w-full text-center focus-visible:outline-none"
-                value={data.companyName ?? "no label"}
+                value={`${data.role} - ${data.site}`}
               />
             </div>
           </div>

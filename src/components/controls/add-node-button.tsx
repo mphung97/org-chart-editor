@@ -1,7 +1,7 @@
-import { AddIcon } from "@/react-icons";
 import { nanoid } from "nanoid";
 import { memo, useCallback } from "react";
 import { ControlButton, Node, useReactFlow } from "reactflow";
+import { CardStackPlusIcon as AddIcon } from "@radix-ui/react-icons";
 
 const AddNode = memo(() => {
   const { setNodes } = useReactFlow();

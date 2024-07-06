@@ -12,13 +12,14 @@ import {
   ControlProps,
   ControlButton,
 } from "reactflow";
+
 import {
-  FitViewIcon,
-  LockIcon,
+  CornersIcon as FitViewIcon,
+  LockClosedIcon as LockIcon,
+  LockOpen1Icon as UnlockIcon,
   MinusIcon,
   PlusIcon,
-  UnlockIcon,
-} from "@/react-icons";
+} from "@radix-ui/react-icons";
 
 type RFControlProps = ControlProps & {
   orientation?: "horizontal" | "vertical";
@@ -78,8 +79,7 @@ function ControlsComponent({
     onInteractiveChange?.(!isInteractive);
   };
 
-  const orientationClass =
-    orientation === "horizontal" ? "flex" : "";
+  const orientationClass = orientation === "horizontal" ? "flex" : "";
 
   return (
     <Panel

@@ -2,7 +2,7 @@
 
 import "reactflow/dist/style.css";
 
-import { memo } from "react";
+import { memo, useCallback } from "react";
 import ReactFlow, {
   Background,
   NodeTypes,
@@ -11,20 +11,27 @@ import ReactFlow, {
   MiniMap,
   ControlButton,
   Node,
+  Connection,
+  useNodesState,
+  useEdgesState,
+  addEdge,
+  useReactFlow,
 } from "reactflow";
-import { useShallow } from "zustand/react/shallow";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import { nanoid } from "nanoid";
+
+import OrgNode from "./org-node";
+import InvisibleNode from "./invisible-node";
+import GradientEdge from "./gradient-edge";
+import ConnectionLine from "./connection-line";
 
 import { RFControls as Controls } from "./controls/rf-controls";
 import ExportPngButton from "./controls/download-image";
-import OrgNode from "./org-node";
-import GradientEdge from "./gradient-edge";
-import { UploadIcon } from "@/react-icons";
-import ConnectionLine from "./connection-line";
-
-import useRFStore from "./store";
-import { selectorRF } from "./selectors";
 import { AddNodeButton } from "./controls/add-node-button";
-import InvisibleNode from "./invisible-node";
+import { UploadButton } from "./controls/upload";
+
+import { initialEdges, initialNodes } from "./nodes-edges";
+import { getLayoutedElements } from "./dagre";
 
 const nodeTypes: NodeTypes = {
   invisible: InvisibleNode,
@@ -38,16 +45,44 @@ const edgeTypes: EdgeTypes = {
 function nodeColor(node: Node) {
   switch (node.type) {
     case "invisible":
-      return "transparent";
+      return "red";
     default:
       return "#e2e2e2";
   }
 }
 
+const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+  initialNodes,
+  initialEdges,
+);
+
 function Flow() {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } = useRFStore(
-    useShallow(selectorRF),
-  );
+  const { fitView } = useReactFlow();
+  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+
+  const onConnect = useCallback((connection: Connection) => {
+    const newEdge = {
+      id: nanoid(),
+      type: "gradientsmoothstep",
+      ...connection,
+    };
+    setEdges((preEdges) => addEdge(newEdge, preEdges));
+  }, []);
+
+  const onLayout = useCallback(() => {
+    const { nodes: layoutedNodes, edges: layoutedEdges } = getLayoutedElements(
+      nodes,
+      edges,
+    );
+
+    setNodes([...layoutedNodes]);
+    setEdges([...layoutedEdges]);
+
+    window.requestAnimationFrame(() => {
+      fitView();
+    });
+  }, [nodes, edges]);
 
   return (
     <div className="h-screen w-screen">
@@ -66,15 +101,16 @@ function Flow() {
       >
         <Background />
         <Controls position="top-left">
-          <ControlButton
-            onClick={() => alert("Something magical just happened. ✨")}
-            title="import"
-            aria-label="import"
-          >
-            <UploadIcon />
-          </ControlButton>
+          <UploadButton />
           <ExportPngButton />
           <AddNodeButton />
+          <ControlButton
+            onClick={onLayout}
+            title="rearrange"
+            aria-label="rearrange"
+          >
+            <ReloadIcon />
+          </ControlButton>
         </Controls>
         <MiniMap pannable zoomable position="top-right" nodeColor={nodeColor} />
       </ReactFlow>

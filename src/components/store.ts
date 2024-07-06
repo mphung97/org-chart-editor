@@ -33,9 +33,9 @@ const useRFStore = create<RFState>((set, get) => ({
   },
   onConnect: (connection: Connection) => {
     const newEdge = {
-      ...connection,
       id: nanoid(),
       type: "gradientsmoothstep",
+      ...connection,
     };
     set({
       edges: addEdge(newEdge, get().edges),

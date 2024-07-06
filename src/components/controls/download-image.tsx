@@ -8,7 +8,7 @@ import {
   ControlButton,
 } from "reactflow";
 import { toPng } from "html-to-image";
-import { DownloadIcon } from "@/react-icons";
+import { DownloadIcon } from "@radix-ui/react-icons";
 import { cn } from "@/utils";
 
 function downloadImage(dataUrl: any) {
