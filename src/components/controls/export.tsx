@@ -27,7 +27,7 @@ function downloadImage(dataUrl: any) {
 const imageWidth = 1024;
 const imageHeight = 768;
 
-function ExportPngButton() {
+const Export = memo(() => {
   const { getNodes } = useReactFlow();
   const [isPending, startTransition] = useTransition();
 
@@ -84,6 +84,6 @@ function ExportPngButton() {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+});
 
-export default memo(ExportPngButton);
+export { Export };

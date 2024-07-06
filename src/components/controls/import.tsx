@@ -12,7 +12,7 @@ import { parseFile } from "@/app/actions";
 import { nanoid } from "nanoid";
 import { getLayoutedElements } from "@/components/flow/dagre";
 
-const UploadButton = memo(() => {
+const Import = memo(() => {
   const { getNode, setNodes } = useReactFlow();
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
@@ -71,4 +71,4 @@ const UploadButton = memo(() => {
   );
 });
 
-export { UploadButton };
+export { Import };

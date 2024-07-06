@@ -1,20 +1,58 @@
-import { memo } from "react";
-import * as Avatar from "@radix-ui/react-avatar";
+import { memo, useState } from "react";
 import { Handle, NodeProps, Position } from "reactflow";
+import * as PrimitiveAvatar from "@radix-ui/react-avatar";
 import { EditButton } from "./edit-button";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu";
 import { cn } from "@/utils";
+import { useDropzone } from "react-dropzone";
 
 // from-pink-500 via-red-500 to-yellow-500
 // from-indigo-500 via-purple-500 to-pink-500
 // from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%
 
-function OrgNode({ data }: NodeProps) {
+const Avatar = memo(({ nodeId }: { nodeId: string }) => {
+  const [file, setFile] = useState<string | undefined>();
+
+  const onDrop = (acceptedFiles: File[]) => {
+    setFile(URL.createObjectURL(acceptedFiles[0]));
+  };
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [],
+    },
+    maxFiles: 1,
+    noDrag: true,
+    noKeyboard: true,
+  });
+
+  return (
+    <PrimitiveAvatar.Root
+      className={cn(
+        "border-[8px] border-[#f1f3ff] border-solid inline-flex justify-center",
+        "h-[100px] w-[100px] select-none items-center overflow-hidden rounded-full align-middle",
+        "cursor-pointer",
+      )}
+      title="avatar"
+      {...getRootProps()}
+    >
+      <PrimitiveAvatar.Image
+        className="h-full w-full rounded-[inherit] object-cover"
+        src={file}
+        alt="Node Avatar"
+      />
+      <PrimitiveAvatar.Fallback
+        className="text-black leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium"
+        delayMs={600}
+      >
+        F
+      </PrimitiveAvatar.Fallback>
+      <input {...getInputProps()} />
+    </PrimitiveAvatar.Root>
+  );
+});
+
+const OrgNode = memo(({ id, data }: NodeProps) => {
   return (
     <>
       <Handle type="target" position={Position.Top} />
@@ -22,7 +60,7 @@ function OrgNode({ data }: NodeProps) {
       <div
         className={cn(
           "shadow-gray-50 drop-shadow-2xl w-[300px] h-[180px] rounded-[24px] p-1",
-          "bg-gradient-to-r from-indigo-500 from-10% via-purple-500 via-30% to-pink-500 to-90%",
+          "bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%",
           "group",
         )}
       >
@@ -36,24 +74,12 @@ function OrgNode({ data }: NodeProps) {
             {/* <EditButton /> */}
             {data.no}
           </div>
-          <Avatar.Root className="border-[8px] border-[#f1f3ff] border-solid bg-blackA1 inline-flex h-[100px] w-[100px] select-none items-center justify-center overflow-hidden rounded-full align-middle">
-            <Avatar.Image
-              className="h-full w-full rounded-[inherit] object-cover"
-              src="https://avatars.githubusercontent.com/u/124599?v=4"
-              alt="Colm Tuite"
-            />
-            <Avatar.Fallback
-              className="text-violet11 leading-1 flex h-full w-full items-center justify-center bg-white text-[15px] font-medium"
-              delayMs={600}
-            >
-              CT
-            </Avatar.Fallback>
-          </Avatar.Root>
+          <Avatar nodeId={id} />
           <input
             readOnly
             type="text"
             className="text-2xl font-bold text-[#141A41] w-full text-center focus-visible:outline-none"
-            value={data.name ?? "no label"}
+            value={data.name ?? "unknown"}
           />
           <input
             readOnly
@@ -66,6 +92,6 @@ function OrgNode({ data }: NodeProps) {
       <Handle type="source" position={Position.Bottom} />
     </>
   );
-}
+});
 
-export default memo(OrgNode);
+export default OrgNode;

@@ -22,14 +22,15 @@ import InvisibleNode from "./invisible-node";
 import GradientEdge from "./gradient-edge";
 import ConnectionLine from "./connection-line";
 
-import { RFControls as Controls } from "../controls/rf-controls";
-import ExportPngButton from "../controls/download-image";
-import { AddNodeButton } from "../controls/add-node-button";
-import { UploadButton } from "../controls/upload";
+import {
+  RFControls as Controls,
+  Export,
+  Import,
+  Rearrange,
+} from "@/components/controls";
 
 import { initialEdges, initialNodes } from "./nodes-edges";
 import { getLayoutedElements } from "./dagre";
-import { Rearrange } from "../controls/rearrange";
 
 const nodeTypes: NodeTypes = {
   invisible: InvisibleNode,
@@ -84,9 +85,8 @@ function Flow() {
       >
         <Background />
         <Controls position="top-left">
-          <UploadButton />
-          <ExportPngButton />
-          <AddNodeButton />
+          <Import />
+          <Export />
           <Rearrange />
         </Controls>
         <MiniMap pannable zoomable position="top-right" nodeColor={nodeColor} />
