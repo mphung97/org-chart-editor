@@ -1,8 +1,8 @@
 import { memo } from "react";
-import { DeleteIcon } from "@/react-icons";
+import { TrashIcon as DeleteIcon } from "@radix-ui/react-icons";
 import { RoundedButton } from "./rounded-button";
 
-const DeleteButton = memo(() => {
+const DeleteButton = memo(function DeleteButton() {
   return (
     <RoundedButton>
       <DeleteIcon />

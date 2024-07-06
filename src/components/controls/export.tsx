@@ -27,7 +27,7 @@ function downloadImage(dataUrl: any) {
 const imageWidth = 1024;
 const imageHeight = 768;
 
-const Export = memo(() => {
+const Export = memo(function Export() {
   const { getNodes } = useReactFlow();
   const [isPending, startTransition] = useTransition();
 

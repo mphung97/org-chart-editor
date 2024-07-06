@@ -3,7 +3,7 @@ import { memo, useCallback } from "react";
 import { ControlButton, Node, useReactFlow } from "reactflow";
 import { CardStackPlusIcon as AddIcon } from "@radix-ui/react-icons";
 
-const AddNode = memo(() => {
+const AddNode = memo(function AddNode() {
   const { setNodes } = useReactFlow();
 
   const onAddNode = useCallback(

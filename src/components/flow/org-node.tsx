@@ -9,7 +9,7 @@ import { useDropzone } from "react-dropzone";
 // from-indigo-500 via-purple-500 to-pink-500
 // from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90%
 
-const Avatar = memo(({ nodeId }: { nodeId: string }) => {
+const Avatar = memo(function Avatar({ nodeId }: { nodeId: string }) {
   const [file, setFile] = useState<string | undefined>();
 
   const onDrop = (acceptedFiles: File[]) => {
@@ -52,7 +52,7 @@ const Avatar = memo(({ nodeId }: { nodeId: string }) => {
   );
 });
 
-const OrgNode = memo(({ id, data }: NodeProps) => {
+const OrgNode = memo(function OrgNode({ id, data }: NodeProps) {
   return (
     <>
       <Handle type="target" position={Position.Top} />

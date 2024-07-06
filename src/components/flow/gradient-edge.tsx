@@ -1,6 +1,5 @@
 "use client";
 
-import { CancelIcon } from "@/react-icons";
 import React, { memo, useCallback } from "react";
 import {
   BaseEdge,

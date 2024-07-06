@@ -12,7 +12,7 @@ import { parseFile } from "@/app/actions";
 import { nanoid } from "nanoid";
 import { getLayoutedElements } from "@/components/flow/dagre";
 
-const Import = memo(() => {
+const Import = memo(function Import() {
   const { getNode, setNodes } = useReactFlow();
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {

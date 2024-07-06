@@ -3,7 +3,7 @@ import { memo, useCallback } from "react";
 import { ControlButton, useReactFlow } from "reactflow";
 import { getLayoutedElements } from "@/components/flow/dagre";
 
-const Rearrange = memo(() => {
+const Rearrange = memo(function Rearrange() {
   const { fitView, getNodes, setNodes, getEdges, setEdges } = useReactFlow();
 
   const onLayout = useCallback(() => {
